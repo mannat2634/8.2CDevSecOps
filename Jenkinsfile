@@ -29,7 +29,7 @@ pipeline {
       emailext (
         subject: "Build Status: ${currentBuild.currentResult}",
         body: "The build ${currentBuild.fullDisplayName} has finished with status: ${currentBuild.currentResult}",
-        to: "your.email@gmail.com",
+        to: "sharmamannat2634@gmail.com",
         attachLog: true
       )
     }
