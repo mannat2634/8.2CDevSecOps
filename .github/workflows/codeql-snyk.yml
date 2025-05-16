@@ -1,0 +1,41 @@
+name: CodeQL and Snyk Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  codeql-scan:
+    name: CodeQL and Snyk scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Snyk
+      run: npm install -g snyk
+
+    - name: Run Snyk test and generate SARIF
+      run: snyk test --sarif-file-output=snyk-sarif.json || true
+
+    - name: Upload Snyk SARIF results
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: snyk-sarif.json
+
